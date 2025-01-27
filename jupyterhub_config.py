@@ -7,14 +7,13 @@ c.JupyterHub.hub_connect_ip = 'jupyterhub'
 #c.JupyterHub.bind_url = 'http://
 
 # Use authentication
-c.JupyterHub.authenticator_class = "dummy"
-# c.JupyterHub.authenticator_class = "LDAPAuthenticator"
-# c.LDAPAuthenticator.server_address = "ldap.etp.kit.edu"
-# c.LDAPAuthenticator.server_port = 636
-# c.LDAPAuthenticator.tls_strategy = "on_connect"
-# c.LDAPAuthenticator.lookup_dn = False
-# c.LDAPAuthenticator.user_search_base ="dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"
-# c.LDAPAuthenticator.bind_dn_template = ["uid={username},ou=people,dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"]
+c.JupyterHub.authenticator_class = "LDAPAuthenticator"
+c.LDAPAuthenticator.server_address = "ldap.etp.kit.edu"
+c.LDAPAuthenticator.server_port = 636
+c.LDAPAuthenticator.tls_strategy = "on_connect"
+c.LDAPAuthenticator.lookup_dn = False
+c.LDAPAuthenticator.user_search_base ="dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"
+c.LDAPAuthenticator.bind_dn_template = ["uid={username},ou=people,dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"]
 
 # Allow all users to log in
 c.Authenticator.allow_all = True
@@ -53,6 +52,3 @@ docker-compose up -d
 c.JupyterHub.api_tokens = {
     'cb96523ac867a52adc059df779f443d5ad56c7163c28fd17d9688fb31da0e5ca': 'jmustafi'
 }
-
-# ldap jupyter auth nutzen für sssd
-# 
