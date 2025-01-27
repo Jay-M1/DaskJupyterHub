@@ -1,3 +1,3 @@
 git add .
-git commit -m "test"
+git commit -m "Dummy Auth works"
 git push origin master
