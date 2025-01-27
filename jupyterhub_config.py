@@ -8,7 +8,7 @@ c.JupyterHub.hub_connect_ip = 'jupyterhub'
 
 # Use authentication
 c.JupyterHub.authenticator_class = "dummy"
-# c.JupyterHub.authenticator_class = "LDAPAuthenticator"
+# c.JupyterHub.authenticator_class = "LDAPAuthenticator"asdf
 # c.LDAPAuthenticator.server_address = "ldap.etp.kit.edu"
 # c.LDAPAuthenticator.server_port = 636
 # c.LDAPAuthenticator.tls_strategy = "on_connect"
