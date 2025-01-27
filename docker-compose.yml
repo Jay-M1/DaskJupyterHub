@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  jupyterhub:
+    image: my_jupyterhub-jupyterhub
+    build: .
+    networks:
+      - jupyternet
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
+      - ./jupyter.token:/srv/jupyterhub/jupyter.token
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  jupyternet:
+    driver: overlay
+    attachable: true
