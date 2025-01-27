@@ -11,7 +11,7 @@ c.JupyterHub.authenticator_class = "dummy"
 # c.JupyterHub.authenticator_class = "LDAPAuthenticator"
 # c.LDAPAuthenticator.server_address = "ldap.etp.kit.edu"
 # c.LDAPAuthenticator.server_port = 636
-# c.LDAPAuthenticator.tls_strategy = "on_connect" jj
+# c.LDAPAuthenticator.tls_strategy = "on_connect" jjjj
 # c.LDAPAuthenticator.lookup_dn = False
 # c.LDAPAuthenticator.user_search_base ="dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"
 # c.LDAPAuthenticator.bind_dn_template = ["uid={username},ou=people,dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"]
