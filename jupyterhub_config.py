@@ -4,7 +4,6 @@ c = get_config()
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.port = 8000
 c.JupyterHub.hub_connect_ip = 'jupyterhub'
-#c.JupyterHub.bind_url = 'http://
 
 # Use authentication
 c.JupyterHub.authenticator_class = "LDAPAuthenticator"
@@ -48,7 +47,3 @@ docker-compose down
 docker-compose build
 docker-compose up -d
 """
-
-c.JupyterHub.api_tokens = {
-    'cb96523ac867a52adc059df779f443d5ad56c7163c28fd17d9688fb31da0e5ca': 'jmustafi'
-}
