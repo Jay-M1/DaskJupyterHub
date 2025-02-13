@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+  condor_gate:
+    image: rocky_gate_ht
+    build:
+      context: .
+      dockerfile: rocky/Dockerfile
+    ports:
+      - "9618:9618"
+    volumes:
+      - .:/work
   jupyterhub:
     image: my_jupyterhub-jupyterhub
     build: .
