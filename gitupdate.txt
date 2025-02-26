@@ -1,3 +1,0 @@
-git add .
-git commit -m "removed credentials"
-git push origin master
