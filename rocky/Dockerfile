@@ -1,3 +1,25 @@
+FROM rockylinux:9
+
+RUN dnf -y swap curl-minimal curl
+
+RUN dnf -y install python3
+RUN python3 -m ensurepip --default-pip
+RUN python3 -m pip install --upgrade pip
+RUN pip3 install dask-gateway
+
+#RUN curl -fsSL https://get.htcondor.org | /bin/bash -s -- --no-dry-run
+
+RUN dnf clean all
+
+EXPOSE 9618
+
+WORKDIR /work
+
+COPY . .
+
+ENTRYPOINT ["/usr/sbin/condor_master", "-f"]
+
+
 # FROM rockylinux:9
 
 # RUN dnf update -y && \
@@ -24,23 +46,5 @@
 #     "update-crypto-policies --set LEGACY && /bin/bash"]
 
 # Use the official Rocky Linux 9 image as the base
-# Use the official Rocky Linux 9 image as the base
-# Use the official Rocky Linux 9 image as the base
-FROM rockylinux:9
 
-# Replace curl-minimal with the full curl package
-RUN dnf -y swap curl-minimal curl && dnf clean all
-
-# Install HTCondor using the official installation script
-RUN curl -fsSL https://get.htcondor.org | /bin/bash -s -- --no-dry-run
-
-# Expose necessary ports (if any)
-EXPOSE 9618
-
-WORKDIR /work
-
-COPY . .
-
-# Set the entrypoint to start HTCondor
-ENTRYPOINT ["/usr/sbin/condor_master", "-f"]
-
+# dienstag 13:30 am 11.
