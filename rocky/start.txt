@@ -1,0 +1,2 @@
+docker build --pull --rm -t htrocky -f Dockerfile .
+docker run -d --platform=linux/amd64 htrocky:latest
