@@ -13,6 +13,17 @@ services:
       - ./jupyter.token:/srv/jupyterhub/jupyter.token
       - /var/run/docker.sock:/var/run/docker.sock
 
+  htrocky:
+    image: my_rocky_image
+    build:
+      context: ./rocky
+    networks:
+      - jupyternet
+    ports:
+      - "9618:9618"
+    volumes:
+      - ./rocky/test.sh:/work/test.sh
+
 networks:
   jupyternet:
     driver: overlay
