@@ -3,14 +3,15 @@ version: '3'
 services:
   jupyterhub:
     image: my_jupyterhub-jupyterhub
-    build: .
+    build: 
+      context: ./jupy
     networks:
       - jupyternet
     ports:
       - "8000:8000"
     volumes:
-      - ./jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
-      - ./jupyter.token:/srv/jupyterhub/jupyter.token
+      - ./jupy/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
+      - ./jupy/jupyter.token:/srv/jupyterhub/jupyter.token
       - /var/run/docker.sock:/var/run/docker.sock
 
   htrocky:
