@@ -1,18 +1,6 @@
 version: '3'
 
 services:
-  htgate:
-    image: htgate:latest
-    platform: linux/amd64
-    restart: unless-stopped
-    build:
-      context: .
-      dockerfile: rocky/Dockerfile
-      pull: true
-    ports:
-      - "9618:9618"
-    volumes:
-      - .:/work
   jupyterhub:
     image: my_jupyterhub-jupyterhub
     build: .
