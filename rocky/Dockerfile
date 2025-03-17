@@ -18,4 +18,6 @@ WORKDIR /work
 
 COPY . .
 
-ENTRYPOINT ["/usr/sbin/condor_master", "-f"]
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
