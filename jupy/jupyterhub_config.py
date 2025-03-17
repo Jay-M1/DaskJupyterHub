@@ -21,7 +21,7 @@ c.Authenticator.allow_all = True
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 
 # Set the Docker image for single-user servers
-c.DockerSpawner.image = 'jupyter/base-notebook:latest'
+c.DockerSpawner.image = 'jnotebook_image'
 c.DockerSpawner.notebook_dir = '/home/jovyan/work'
 
 # Remove containers once they are stopped
