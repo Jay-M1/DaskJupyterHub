@@ -13,4 +13,4 @@ COPY run_notebook.sh /home/jovyan/work
 RUN chmod +x /home/jovyan/work/run_notebook.sh
 
 # # Set the startup script as the default command
-# CMD ["/home/jovyan/work/run_notebook.sh"]
+#CMD ["/home/jovyan/work/run_notebook.sh"]
