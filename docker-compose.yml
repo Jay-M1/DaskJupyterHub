@@ -1,9 +1,16 @@
 version: '3'
 
 services:
+
+  htrocky:
+    image: my_rocky_image
+    build:
+      context: ./rocky
+    networks:
+      - jupyternet
+    ports:
+      - "9618:9618"
   jupyterhub:
-    depends_on:
-      - notebook
     image: my_jupyterhub-jupyterhub
     build: 
       context: ./jupy
@@ -17,22 +24,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       
   notebook:
+    depends_on:
+      - jupyterhub
+      - htrocky
     image: jnotebook_image
     build:
       context: ./jupy/notebook
     networks:
       - jupyternet
-
-  htrocky:
-    image: my_rocky_image
-    build:
-      context: ./rocky
-    networks:
-      - jupyternet
-    ports:
-      - "9618:9618"
-    volumes:
-      - ./rocky/test.sh:/work/test.sh
 
 networks:
   jupyternet:
