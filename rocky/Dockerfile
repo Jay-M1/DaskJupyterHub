@@ -9,6 +9,7 @@ RUN dnf -y install python3
 RUN python3 -m ensurepip --default-pip
 RUN python3 -m pip install --upgrade pip
 RUN pip3 install dask-gateway dask-gateway-server[local]
+RUN pip install git+https://github.com/giffels/dask-gateway-htcondor.git
 
 RUN dnf clean all
 

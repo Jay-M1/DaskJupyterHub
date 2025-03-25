@@ -1,2 +1,3 @@
-# cluster mit gateway
-# config aus BA
+config an condor übergeben
+giffels/coffea-dask-cc7-gateway neues OS
+cluster mit gateway
