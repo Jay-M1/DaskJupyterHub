@@ -9,8 +9,5 @@ COPY gateway.ipynb /home/jovyan/work
 # Copy the startup script into the container
 COPY run_notebook.sh /home/jovyan/work
 
-# Ensure the startup script is executable
-RUN chmod +x /home/jovyan/work/run_notebook.sh
-
 # # Set the startup script as the default commandasdf
-#CMD ["/home/jovyan/work/run_notebook.sh"]
+CMD ["/home/jovyan/work/run_notebook.sh"]
