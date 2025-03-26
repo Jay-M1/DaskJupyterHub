@@ -1,8 +1,11 @@
 FROM rockylinux:9
 
+RUN useradd -m -u 1000 jovyan
+
 RUN dnf -y swap curl-minimal curl
 
 RUN curl -fsSL https://get.htcondor.org | /bin/bash -s -- --no-dry-run
+
 
 RUN dnf -y install python3 git
 RUN python3 -m ensurepip --default-pip
@@ -20,5 +23,7 @@ WORKDIR /work
 COPY . .
 
 RUN chmod +x start.sh
+
+RUN dnf install -y sudo
 
 CMD ["./start.sh"]
