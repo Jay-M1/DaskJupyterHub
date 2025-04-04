@@ -10,6 +10,8 @@ services:
       - jupyternet
     ports:
       - "9618:9618"
+    environment:
+      - DASK_GATEWAY_CONFIG=/work/dask-gateway_server_config.py
   jupyterhub:
     image: my_jupyterhub-jupyterhub
     build: 

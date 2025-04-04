@@ -15,3 +15,5 @@ c.HTCondorClusterConfig.docker_image = "giffels/coffea-dask-cc7-gateway"
 c.HTCondorClusterConfig.extra_jdl = {"accounting_group": "dask"}
 c.HTCondorClusterConfig.staging_directory = "/tmp/dask/.dask-gateway/"
 c.HTCondorClusterConfig.tls_worker_node_prefix_path = ""
+
+print(">>> custom config executed")
