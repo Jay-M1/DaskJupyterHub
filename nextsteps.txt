@@ -1,3 +1,2 @@
-config an condor übergeben
-giffels/coffea-dask-cc7-gateway neues OS
-cluster mit gateway
+nutze giffels github um scipt zu finden dash die datei
+../home/jovyan/.dask-gateway-htcondor/5b289214ce174602b6d0a81bfb510940/run_scheduler_5b289214ce174602b6d0a81bfb510940.sh automatisch executable macht für alle angelegte cluster

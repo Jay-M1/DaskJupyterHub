@@ -29,3 +29,5 @@ c.DockerSpawner.remove = False
 c.DockerSpawner.use_internal_ip = True
 c.DockerSpawner.network_name = 'my_jupyterhub_jupyternet'
 c.Spawner.debug = True
+#c.DockerSpawner.debug = True
+#c.DockerSpawner.cmd = ['jupyterhub-singleuser']
