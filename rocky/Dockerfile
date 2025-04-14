@@ -1,29 +1,32 @@
 FROM rockylinux:9
 
-RUN useradd -m -u 1000 jovyan
+# Install base dependencies and create user
+RUN dnf install -y sudo \
+ && dnf update -y \
+ && dnf -y swap curl-minimal curl \
+ && dnf install -y vim python3 git \
+ && dnf clean all \
+ && useradd -m -u 1000 jovyan
 
-RUN dnf -y swap curl-minimal curl
-
+# Install HTCondor
 RUN curl -fsSL https://get.htcondor.org | /bin/bash -s -- --no-dry-run
 
+# Python setup and packages
+RUN python3 -m ensurepip --default-pip \
+ && python3 -m pip install --upgrade pip \
+ && pip install --no-cache-dir \
+    dask-gateway \
+    'dask-gateway-server[local]' \
+    'SQLAlchemy<2.0' \
+    git+https://github.com/Jay-M1/dask-gateway-htcondor.git
 
-RUN dnf -y install python3 git
-RUN python3 -m ensurepip --default-pip
-RUN python3 -m pip install --upgrade pip
-RUN pip3 install dask-gateway dask-gateway-server[local]
-RUN pip install git+https://github.com/giffels/dask-gateway-htcondor.git
-RUN pip install "SQLAlchemy<2.0"
-
-RUN dnf clean all
-
-EXPOSE 9618
-
+# Set up working directory and copy files
 WORKDIR /work
-
 COPY . .
 
+# Set permissions
 RUN chmod +x start.sh
 
-RUN dnf install -y sudo
-
+# Expose required port and set default command
+EXPOSE 9618
 CMD ["./start.sh"]
