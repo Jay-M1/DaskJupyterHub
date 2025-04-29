@@ -2,3 +2,4 @@ jupyterhub/jupyterhub_cookie_secret
 jupyterhub/jupyterhub.sqlite
 jupyter.token
 nextsteps.txt
+coffea/

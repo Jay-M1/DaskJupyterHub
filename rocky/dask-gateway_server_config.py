@@ -11,7 +11,7 @@ c.HTCondorClusterConfig.worker_cores = 8
 c.HTCondorBackend.cluster_start_timeout = 600
 c.HTCondorBackend.worker_start_timeout = 600
 
-c.HTCondorClusterConfig.docker_image = "giffels/coffea-dask-cc7-gateway"
+c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorClusterConfig.extra_jdl = {"accounting_group": "dask"}
 c.HTCondorClusterConfig.staging_directory = "/tmp/dask/.dask-gateway/"
 c.HTCondorClusterConfig.tls_worker_node_prefix_path = ""
