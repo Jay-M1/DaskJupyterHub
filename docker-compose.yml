@@ -6,6 +6,8 @@ services:
     image: my_rocky_image
     build:
       context: ./rocky
+      args:
+        GIT_REPO_VERSION: "84d446aa"
     networks:
       - jupyternet
     ports:

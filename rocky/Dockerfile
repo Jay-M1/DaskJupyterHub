@@ -15,10 +15,9 @@ RUN dnf install -y sudo \
 RUN curl -fsSL https://get.htcondor.org | /bin/bash -s -- --no-dry-run
 
 # Python setup and packages
+ARG GIT_REPO_VERSION=unknown
 RUN python3 -m ensurepip --default-pip \
  && python3 -m pip install --upgrade pip \
- && python3 -m pip list \
- && python3 -m pip install numpy \
  && pip install --no-cache-dir \
     dask-gateway \
     'dask-gateway-server[local]' \
