@@ -1,4 +1,4 @@
-c = get_config()
+c = get_config() # type: ignore[name-defined]
 
 # Set the JupyterHub IP and port
 c.JupyterHub.ip = '0.0.0.0'

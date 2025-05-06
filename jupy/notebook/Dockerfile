@@ -1,9 +1,3 @@
-FROM jupyter/base-notebook:latest
+FROM jupyterhub/singleuser@sha256:3e8ad15629fb14d20e7cad06f6e8e1c26908c28b208bc35af8976a7efa446491
 
 RUN pip install dask-gateway
-
-WORKDIR /home/jovyan/work
-
-COPY . .
-
-CMD ["/home/jovyan/work/run_notebook.sh"]
