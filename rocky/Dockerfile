@@ -1,4 +1,4 @@
-FROM rockylinux:9
+FROM rockylinux/rockylinux@sha256:767f30c94a9a43e46719408f877fb4eb91cea98401dd76a23abfc345ae5cb4ad
 
 # Install base dependencies and create user
 RUN dnf install -y sudo \
