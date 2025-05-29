@@ -3,3 +3,4 @@ jupyterhub/jupyterhub.sqlite
 jupyter.token
 nextsteps.txt
 howto.txt
+.old
