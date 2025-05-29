@@ -1,3 +1,5 @@
+import pwd
+
 c = get_config() # type: ignore[name-defined]
 
 # Set the JupyterHub IP and port
@@ -22,7 +24,7 @@ c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 
 # Set the Docker image for single-user servers
 c.DockerSpawner.image = 'jnotebook_image'
-c.DockerSpawner.notebook_dir = '/home/jovyan/work'
+c.DockerSpawner.notebook_dir = '/home/{username}/work'
 
 # Remove containers once they are stopped
 c.DockerSpawner.remove = False
@@ -31,3 +33,14 @@ c.DockerSpawner.network_name = 'my_jupyterhub_jupyternet'
 c.Spawner.debug = True
 #c.DockerSpawner.debug = True
 #c.DockerSpawner.cmd = ['jupyterhub-singleuser']
+
+# Define the environment variables for the user
+def define_environment(spawner):
+    user_name = spawner.user.name
+    user_id = pwd.getpwnam(user_name).pw_uid
+    group_id = pwd.getpwnam(user_name).pw_gid
+    spawner.environment.update(dict(NB_USER=user_name,
+                                    NB_UID=str(user_id),
+                                    NB_GID=str(group_id)))
+
+c.Spawner.pre_spawn_hook = define_environment

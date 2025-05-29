@@ -1,7 +1,7 @@
-# Configure the gateway to use PBS
+# Configure the gateway to use HTCondor
 c.DaskGateway.backend_class = ( # type: ignore[name-defined]
-    "dask_gateway_htcondor.htcondor.HTCondorBackend"
-)
+            "dask_gateway_htcondor.htcondor.HTCondorBackend"
+            )
 
 # The resource limits for a worker
 c.HTCondorClusterConfig.worker_memory = '16 G' # type: ignore[name-defined]
@@ -16,4 +16,3 @@ c.HTCondorClusterConfig.extra_jdl = {"accounting_group": "dask"} # type: ignore[
 c.HTCondorClusterConfig.staging_directory = "/tmp/dask/.dask-gateway/" # type: ignore[name-defined]
 c.HTCondorClusterConfig.tls_worker_node_prefix_path = "" # type: ignore[name-defined]
 
-print(">>> custom config executed")

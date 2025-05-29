@@ -1,6 +1,0 @@
-Universe   = vanilla
-Executable = test.sh
-Output     = test.out
-Error      = test.err
-Log        = test.log
-Queue
