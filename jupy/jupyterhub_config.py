@@ -1,4 +1,3 @@
-import pwd
 import os
 import warnings
 
@@ -30,7 +29,6 @@ c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 # Set the Docker image for single-user servers
 c.DockerSpawner.image = 'jnotebook_image'
 #c.DockerSpawner.notebook_dir = '/home/{username}/work'
-
 # Remove containers once they are stopped
 c.DockerSpawner.remove = False
 c.DockerSpawner.use_internal_ip = True
@@ -38,6 +36,13 @@ c.DockerSpawner.network_name = 'my_jupyterhub_jupyternet'
 c.Spawner.debug = True
 #c.DockerSpawner.debug = True
 #c.DockerSpawner.cmd = ["start-notebook.sh"]
+
+c.DockerSpawner.volumes = {
+    '/home/{username}':  '/home/{username}'
+}
+c.DockerSpawner.extra_create_kwargs = {
+    "user": "root" # Can also be an integer UID
+}
 
 # Define the environment variables for the user
 async def define_environment(spawner):
