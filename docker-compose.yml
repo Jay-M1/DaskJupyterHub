@@ -5,7 +5,7 @@ services:
     build:
       context: ./rocky
       args:
-        GIT_REPO_VERSION: "84d446aa"
+        GIT_REPO_VERSION: "84d4dwdhd46aa"
     networks:
       - jupyternet
     ports:
