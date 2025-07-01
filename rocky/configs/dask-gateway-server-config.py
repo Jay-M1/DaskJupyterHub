@@ -13,6 +13,5 @@ c.HTCondorBackend.worker_start_timeout = 600 # type: ignore[name-defined]
 
 c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest" # type: ignore[name-defined]
 c.HTCondorClusterConfig.extra_jdl = {"accounting_group": "dask"} # type: ignore[name-defined]
-c.HTCondorClusterConfig.staging_directory = "/tmp/dask/.dask-gateway/" # type: ignore[name-defined]
+c.HTCondorClusterConfig.staging_directory = "/tmp/.dask-gateway/" # type: ignore[name-defined]
 c.HTCondorClusterConfig.tls_worker_node_prefix_path = "" # type: ignore[name-defined]
-

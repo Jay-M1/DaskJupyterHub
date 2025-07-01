@@ -46,5 +46,8 @@ RUN chmod +rx /tini
 COPY init.sh /srv/init.sh
 RUN chmod +x /srv/init.sh
 
+RUN useradd -m jovyan
+RUN mkdir -p /tmp/.dask-gateway && chmod 777 /tmp/.dask-gateway
+
 WORKDIR /srv
 ENTRYPOINT ["/tini", "-s", "--", "/srv/init.sh"]
