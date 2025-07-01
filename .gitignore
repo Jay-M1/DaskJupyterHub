@@ -4,3 +4,4 @@ jupyter.token
 nextsteps.txt
 howto.txt
 .old
+jupyterhub_cookie_secret
