@@ -5,7 +5,7 @@ c = get_config() # type: ignore[name-defined]
 
 # Set the JupyterHub IP and port
 c.JupyterHub.ip = '0.0.0.0'
-c.JupyterHub.port = 8000
+c.JupyterHub.port = 8555
 c.JupyterHub.hub_connect_ip = 'jupyterhub'
 
 # Use authentication
