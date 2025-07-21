@@ -5,3 +5,5 @@ nextsteps.txt
 howto.txt
 .old
 jupyterhub_cookie_secret
+.env
+jupy/start.sh

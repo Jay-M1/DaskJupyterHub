@@ -19,6 +19,8 @@ services:
     image: my_jupyterhub-jupyterhub
     build: 
       context: ./jupy
+    env_file:
+      - ./jupy/.env
     networks:
       - jupyternet
     ports:
