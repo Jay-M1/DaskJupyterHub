@@ -73,6 +73,9 @@ c.JupyterHub.load_roles = [
         "scopes": [
             # specify the permissions the token should have
             "admin:users",
+            "admin:groups",
+            "list:groups",
+            "groups",
         ],
         "services": [
             # assign the service the above permissions
