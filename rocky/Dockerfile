@@ -19,8 +19,8 @@ RUN authconfig --enablesssd --update
 ARG GIT_REPO_VERSION=unknown
 # Install dask-gateway
 RUN python3 -m ensurepip --default-pip \
- && python3 -m pip install --upgrade pip --no-cache-dir \
- && pip install --no-cache-dir \
+    && python3 -m pip install --upgrade pip --no-cache-dir \
+    && pip install --no-cache-dir \
     dask-gateway \
     'dask-gateway-server' \
     'SQLAlchemy<2.0' \

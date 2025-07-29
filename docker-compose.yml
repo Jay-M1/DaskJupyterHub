@@ -5,9 +5,10 @@ services:
     build:
       context: ./rocky
       args:
-        GIT_REPO_VERSION: "84d4dwdhdweddj46aa"
-    networks:
-      - jupyternet
+        GIT_REPO_VERSION: "2938"
+    #networks:
+     # - jupyternet
+    network_mode: host
     ports:
       - "9618:9618"
       - "8000:8000"
