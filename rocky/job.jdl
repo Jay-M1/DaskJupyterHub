@@ -5,3 +5,6 @@ log = logs/cluster.log
 
 request_cpus = 1
 request_memory = 1024
+
+universe = docker
+docker_image = uhsur/coffea-base-almalinux9:latest
