@@ -15,3 +15,5 @@ c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest" # t
 c.HTCondorClusterConfig.extra_jdl = {"accounting_group": "dask"} # type: ignore[name-defined]
 c.HTCondorClusterConfig.staging_directory = "/tmp/.dask-gateway/" # type: ignore[name-defined]
 c.HTCondorClusterConfig.tls_worker_node_prefix_path = "" # type: ignore[name-defined]
+c.HTCondorBackend.scheduler_docker_image = "uhsur/coffea-base-almalinux9:latest"
+c.HTCondorBackend.scheduler_universe = "docker"

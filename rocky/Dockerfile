@@ -16,15 +16,47 @@ COPY --chmod=600 configs/nscd.conf /etc/nscd.conf
 COPY configs/nsswitch.conf /etc/nsswitch.conf
 RUN authconfig --enablesssd --update
 
-ARG GIT_REPO_VERSION=unknown
-# Install dask-gateway
-RUN python3 -m ensurepip --default-pip \
-    && python3 -m pip install --upgrade pip --no-cache-dir \
-    && pip install --no-cache-dir \
+
+RUN dnf -y install \
+    gcc \
+    make \
+    wget \
+    openssl-devel \
+    bzip2-devel \
+    libffi-devel \
+    zlib-devel \
+    sqlite-devel \
+    xz-devel \
+    ncurses-devel \
+    readline-devel \
+    tk-devel \
+    gdbm-devel \
+    libuuid-devel \
+    libnsl2 \
+    libtirpc-devel \
+    && dnf clean all
+
+
+# Install Python 3.12 from source
+RUN wget https://www.python.org/ftp/python/3.12.4/Python-3.12.4.tgz \
+    && tar xzf Python-3.12.4.tgz \
+    && cd Python-3.12.4 \
+    && ./configure --enable-optimizations \
+    && make -j$(nproc) \
+    && make altinstall \
+    && cd .. \
+    && rm -rf Python-3.12.4 Python-3.12.4.tgz
+
+# Use pip for Python 3.12 to install Dask Gateway
+RUN python3.12 -m ensurepip \
+    && python3.12 -m pip install --upgrade pip --no-cache-dir \
+    && python3.12 -m pip install --no-cache-dir \
     dask-gateway \
     'dask-gateway-server' \
-    'SQLAlchemy<2.0' \
-    git+https://github.com/Jay-M1/dask-gateway-htcondor.git --no-cache-dir
+    async_timeout \
+    'SQLAlchemy<2.0'
+ARG GIT_REPO_VERSION=unknown
+RUN python3.12 -m pip install --no-cache-dir git+https://github.com/Jay-M1/dask-gateway-htcondor.git
 
 COPY configs/dask-gateway-server-config.py /srv/dask-gateway-server-config.py
 
@@ -48,6 +80,11 @@ RUN chmod +x /srv/init.sh
 
 RUN useradd -m jovyan
 RUN mkdir -p /tmp/.dask-gateway && chmod 777 /tmp/.dask-gateway
+
+ENV PATH="/usr/local/bin:$PATH"
+RUN ln -sf /usr/local/bin/python3.12 /usr/bin/python3 && \
+    ln -sf /usr/local/bin/pip3.12 /usr/bin/pip3
+
 
 WORKDIR /srv
 ENTRYPOINT ["/tini", "-s", "--", "/srv/init.sh"]
