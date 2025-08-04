@@ -18,3 +18,4 @@ USER $NB_USER
 ENV PATH="/opt/venv312/bin:$PATH"
 ENV PYTHONPATH="/opt/venv312/lib/python3.12/site-packages"
 
+HEALTHCHECK NONE
