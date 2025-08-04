@@ -41,6 +41,18 @@ services:
     networks:
       - jupyternet
 
+  nginx:
+    image: nginx_image
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - jupyternet
+    depends_on:
+      - jupyterhub
+
 networks:
   jupyternet:
     driver: overlay
