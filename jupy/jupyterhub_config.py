@@ -1,11 +1,10 @@
 import os
 import warnings
 
-c = get_config() # type: ignore[name-defined]
+c = get_config() # type: ignore[name-defined]  # noqa: F821
 
 # Set the JupyterHub IP and port
-c.JupyterHub.ip = '0.0.0.0'
-c.JupyterHub.port = 8555
+c.JupyterHub.bind_url = 'http://0.0.0.0:8555'
 c.JupyterHub.hub_connect_ip = 'jupyterhub'
 
 # Use authentication
@@ -30,9 +29,9 @@ c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 c.DockerSpawner.image = 'jnotebook_image'
 #c.DockerSpawner.notebook_dir = '/home/{username}/work'
 # Remove containers once they are stopped
-c.DockerSpawner.remove = False
+c.DockerSpawner.remove = False # True??
 c.DockerSpawner.use_internal_ip = True
-c.DockerSpawner.network_name = 'my_jupyterhub_jupyternet'
+c.DockerSpawner.network_name = 'my_jupyterhub_jupyternet' # jupyeternet???
 c.Spawner.debug = True
 #c.DockerSpawner.debug = True
 #c.DockerSpawner.cmd = ["start-notebook.sh"]
