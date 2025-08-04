@@ -7,3 +7,4 @@ howto.txt
 jupyterhub_cookie_secret
 .env
 jupy/start.sh
+nginx/certs
