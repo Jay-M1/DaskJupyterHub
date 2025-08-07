@@ -1,5 +1,13 @@
+import os
+from typing import TYPE_CHECKING
+
+from traitlets.config import Configurable
+
+if TYPE_CHECKING:
+    c = Configurable()
+
 # Configure the gateway to use HTCondor
-c.DaskGateway.backend_class = ( # type: ignore[name-defined]
+c.DaskGateway.backend_class = ( # type: ignore[name-defined] 
             "dask_gateway_htcondor.htcondor.HTCondorBackend"
             )
 
@@ -17,3 +25,7 @@ c.HTCondorClusterConfig.staging_directory = "/tmp/.dask-gateway/" # type: ignore
 c.HTCondorClusterConfig.tls_worker_node_prefix_path = "" # type: ignore[name-defined]
 c.HTCondorBackend.scheduler_docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorBackend.scheduler_universe = "docker"
+
+c.DaskGateway.authenticator_class = "dask_gateway_server.auth.JupyterHubAuthenticator"
+c.JupyterHubAuthenticator.api_token = os.getenv("JUPYTERHUB_API_TOKEN")
+c.JupyterHubAuthenticator.api_url = "<API URL>"
