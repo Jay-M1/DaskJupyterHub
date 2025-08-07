@@ -24,8 +24,6 @@ services:
       - ./jupy/.env
     networks:
       - jupyternet
-    ports:
-      - "8555:8555"
     volumes:
       - ./jupy/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
       - ./jupy/jupyter.token:/srv/jupyterhub/jupyter.token
