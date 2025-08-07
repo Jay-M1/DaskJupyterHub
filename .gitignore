@@ -5,6 +5,7 @@ nextsteps.txt
 howto.txt
 .old
 jupyterhub_cookie_secret
-.env
+rocky/configs/.env
+jupy/.env
 jupy/start.sh
 nginx/certs
