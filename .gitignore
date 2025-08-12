@@ -1,11 +1,9 @@
-jupyterhub/jupyterhub_cookie_secret
-jupyterhub/jupyterhub.sqlite
-jupyter.token
+jupyterhub
 nextsteps.txt
-howto.txt
-.old
+.ipynb_checkpoints
+
+jupyter.token
 jupyterhub_cookie_secret
-rocky/configs/.env
-jupy/.env
-jupy/start.sh
+jupyterhub.sqlite
 nginx/certs
+.env

@@ -43,46 +43,13 @@ c.DockerSpawner.extra_create_kwargs = {
     "user": "root" # Can also be an integer UID
 }
 
-c.JupyterHub.admin_users = {"jmustafi"}
-
 api_token = os.environ.get("JUPYTERHUB_API_TOKEN")
 if not api_token:
     raise ValueError("JUPYTERHUB_API_TOKEN environment variable must be set")
 
-
-c.JupyterHub.api_tokens = {
-    api_token: "jmustafi",
-}
-
 c.JupyterHub.services = [
-    {
-        # give the token a name
-        "name": "service-admin",
-        "api_token": api_token,
-        # "admin": True, # if using JupyterHub 1.x
-    },
+    {"name": "dask-gateway", "api_token": api_token}
 ]
-
-# roles were introduced in JupyterHub 2.0
-# prior to 2.0, only "admin": True or False was available
-
-c.JupyterHub.load_roles = [
-    {
-        "name": "service-role",
-        "scopes": [
-            # specify the permissions the token should have
-            "admin:users",
-            "admin:groups",
-            "list:groups",
-            "groups",
-        ],
-        "services": [
-            # assign the service the above permissions
-            "service-admin",
-        ],
-    }
-]
-
 
 # Define the environment variables for the user
 async def define_environment(spawner):
