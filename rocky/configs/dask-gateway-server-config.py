@@ -27,5 +27,5 @@ c.HTCondorBackend.scheduler_docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorBackend.scheduler_universe = "docker"
 
 c.DaskGateway.authenticator_class = "dask_gateway_server.auth.JupyterHubAuthenticator"
-c.JupyterHubAuthenticator.api_token = os.getenv("JUPYTERHUB_API_TOKEN")
-c.JupyterHubAuthenticator.api_url = "<API URL>"
+c.JupyterHubAuthenticator.jupyterhub_api_token = os.getenv("JUPYTERHUB_API_TOKEN")
+c.JupyterHubAuthenticator.jupyterhub_api_url = "http://lx5.etp.kit.edu:8555/hub/api"

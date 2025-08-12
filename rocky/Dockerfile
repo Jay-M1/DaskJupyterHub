@@ -47,14 +47,21 @@ RUN wget https://www.python.org/ftp/python/3.12.4/Python-3.12.4.tgz \
     && cd .. \
     && rm -rf Python-3.12.4 Python-3.12.4.tgz
 
+ENV PATH="/usr/local/bin:$PATH"
+
 # Use pip for Python 3.12 to install Dask Gateway
 RUN python3.12 -m ensurepip \
     && python3.12 -m pip install --upgrade pip --no-cache-dir \
     && python3.12 -m pip install --no-cache-dir \
-    dask-gateway \
+    dask-gateway==2024.1.0 \
+    dask==2024.1.0 \
+    distributed==2024.1.0 \
     'dask-gateway-server' \
     async_timeout \
-    'SQLAlchemy<2.0'
+    'SQLAlchemy<2.0' \
+    lz4 \
+    msgpack \
+    tornado
 ARG GIT_REPO_VERSION=unknown
 RUN python3.12 -m pip install --no-cache-dir git+https://github.com/Jay-M1/dask-gateway-htcondor.git
 
@@ -71,7 +78,7 @@ COPY --chmod=666 job.jdl /tmp/job.jdl
 RUN mkdir -m 1777 /tmp/logs
 
 # Add Tini
-ENV TINI_VERSION v0.19.0
+ENV TINI_VERSION=v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +rx /tini
 
@@ -80,11 +87,6 @@ RUN chmod +x /srv/init.sh
 
 RUN useradd -m jovyan
 RUN mkdir -p /tmp/.dask-gateway && chmod 777 /tmp/.dask-gateway
-
-ENV PATH="/usr/local/bin:$PATH"
-RUN ln -sf /usr/local/bin/python3.12 /usr/bin/python3 && \
-    ln -sf /usr/local/bin/pip3.12 /usr/bin/pip3
-
 
 WORKDIR /srv
 ENTRYPOINT ["/tini", "-s", "--", "/srv/init.sh"]

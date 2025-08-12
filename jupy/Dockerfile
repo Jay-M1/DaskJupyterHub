@@ -7,8 +7,3 @@ WORKDIR /srv/jupyterhub
 
 COPY jupyterhub_config.py jupyterhub_config.py
 COPY jupyter.token jupyter.token
-COPY start.sh start.sh
-
-RUN chmod +x start.sh
-
-CMD [ "./start.sh" ]

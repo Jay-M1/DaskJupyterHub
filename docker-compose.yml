@@ -7,7 +7,7 @@ services:
       args:
         GIT_REPO_VERSION: "2938"
     #networks:
-     # - jupyternet
+    # - jupyternet
     network_mode: host
     ports:
       - "9618:9618"
@@ -16,14 +16,18 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/condor:/var/lib/condor
       - /home:/home
+    env_file:
+      - .env
   jupyterhub:
     image: my_jupyterhub-jupyterhub
     build: 
       context: ./jupy
     env_file:
-      - ./jupy/.env
+      - .env
     networks:
       - jupyternet
+    ports:
+      - "8555:8555"
     volumes:
       - ./jupy/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
       - ./jupy/jupyter.token:/srv/jupyterhub/jupyter.token

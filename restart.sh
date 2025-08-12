@@ -6,3 +6,4 @@ docker rmi -f $(docker images -q)
 
 docker compose build
 docker compose up -d
+docker ps
