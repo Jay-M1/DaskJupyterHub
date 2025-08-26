@@ -48,7 +48,7 @@ RUN wget https://www.python.org/ftp/python/3.12.4/Python-3.12.4.tgz \
     && rm -rf Python-3.12.4 Python-3.12.4.tgz
 
 ENV PATH="/usr/local/bin:$PATH"
-
+#TODO mach python 3.12 from source weg
 # Use pip for Python 3.12 to install Dask Gateway
 RUN python3.12 -m ensurepip \
     && python3.12 -m pip install --upgrade pip --no-cache-dir \
