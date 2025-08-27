@@ -7,22 +7,29 @@ if TYPE_CHECKING:
     c = Configurable()
 
 # Configure the gateway to use HTCondor
-c.DaskGateway.backend_class = ( # type: ignore[name-defined] 
+c.DaskGateway.backend_class = ( 
             "dask_gateway_htcondor.htcondor.HTCondorBackend"
             )
+c.DaskGateway.public_url = "http://lx5:8000"
 
 # The resource limits for a worker
-c.HTCondorClusterConfig.worker_memory = '16 G' # type: ignore[name-defined]
-c.HTCondorClusterConfig.worker_cores = 8 # type: ignore[name-defined]
+c.HTCondorClusterConfig.worker_memory = '16 G'
+c.HTCondorClusterConfig.worker_cores = 8
 
 # Increase startup timeouts to 5 min (600 seconds) each
-c.HTCondorBackend.cluster_start_timeout = 600 # type: ignore[name-defined]
-c.HTCondorBackend.worker_start_timeout = 600 # type: ignore[name-defined]
+c.HTCondorBackend.cluster_start_timeout = 600
+c.HTCondorBackend.worker_start_timeout = 600
 
-c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest" # type: ignore[name-defined]
-c.HTCondorClusterConfig.extra_jdl = {"accounting_group": "dask"} # type: ignore[name-defined]
-c.HTCondorClusterConfig.staging_directory = "/tmp/.dask-gateway/" # type: ignore[name-defined]
-c.HTCondorClusterConfig.tls_worker_node_prefix_path = "" # type: ignore[name-defined]
+c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest"
+c.HTCondorClusterConfig.extra_jdl = {
+    "accounting_group": "dask",
+    "requirements": '(HasDocker == true)',
+    "log":    "/var/lib/condor/dask/job.$(ClusterId).$(ProcId).log",
+    "output": "/var/lib/condor/dask/job.$(ClusterId).$(ProcId).out",
+    "error":  "/var/lib/condor/dask/job.$(ClusterId).$(ProcId).err",
+}
+c.HTCondorClusterConfig.staging_directory = "/tmp/.dask-gateway/"
+c.HTCondorClusterConfig.tls_worker_node_prefix_path = ""
 c.HTCondorBackend.scheduler_docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorBackend.scheduler_universe = "docker"
 
