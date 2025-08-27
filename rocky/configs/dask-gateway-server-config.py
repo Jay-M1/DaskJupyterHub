@@ -13,12 +13,12 @@ c.DaskGateway.backend_class = (
 c.DaskGateway.public_url = "http://lx5:8000"
 
 # The resource limits for a worker
-c.HTCondorClusterConfig.worker_memory = '16 G'
-c.HTCondorClusterConfig.worker_cores = 8
+c.HTCondorClusterConfig.worker_memory = '2 G'
+c.HTCondorClusterConfig.worker_cores = 1
 
 # Increase startup timeouts to 5 min (600 seconds) each
-c.HTCondorBackend.cluster_start_timeout = 600
-c.HTCondorBackend.worker_start_timeout = 600
+c.HTCondorBackend.cluster_start_timeout = 600 # for job sched
+c.HTCondorBackend.worker_start_timeout = 6000
 
 c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorClusterConfig.extra_jdl = {
