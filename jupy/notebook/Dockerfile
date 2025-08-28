@@ -32,7 +32,9 @@ RUN /opt/venv310/bin/pip install --upgrade pip && \
     dask-gateway==2025.4.0 \
     lz4==4.3.3 \
     msgpack==1.1.0 \
-    tornado==6.4.2
+    tornado==6.4.2 \
+    numpy==1.26.4 \
+    pandas==2.2.3
 
 # Register Python 3.10 kernel in Jupyter
 RUN /opt/venv310/bin/python -m ipykernel install --name python310 --display-name "Python 3.10 (venv310)"
