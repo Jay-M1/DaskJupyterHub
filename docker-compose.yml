@@ -6,8 +6,6 @@ services:
       context: ./rocky
       args:
         GIT_REPO_VERSION: "2938"
-    #networks:
-    # - jupyternet
     network_mode: host
     ports:
       - "9618:9618"
@@ -53,6 +51,9 @@ services:
       - jupyternet
     depends_on:
       - jupyterhub
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "hub.local:127.0.0.1"
 
 networks:
   jupyternet:

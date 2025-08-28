@@ -17,8 +17,8 @@ c.HTCondorClusterConfig.worker_memory = '2 G'
 c.HTCondorClusterConfig.worker_cores = 1
 
 # Increase startup timeouts to 5 min (600 seconds) each
-c.HTCondorBackend.cluster_start_timeout = 600 # for job sched
-c.HTCondorBackend.worker_start_timeout = 6000
+c.HTCondorBackend.cluster_start_timeout = 6000000000000000000000 # for job sched
+c.HTCondorBackend.worker_start_timeout = 6000000000000000000000
 
 c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorClusterConfig.extra_jdl = {
@@ -36,3 +36,5 @@ c.HTCondorBackend.scheduler_universe = "docker"
 c.DaskGateway.authenticator_class = "dask_gateway_server.auth.JupyterHubAuthenticator"
 c.JupyterHubAuthenticator.jupyterhub_api_token = os.getenv("JUPYTERHUB_API_TOKEN")
 c.JupyterHubAuthenticator.jupyterhub_api_url = "http://lx5.etp.kit.edu:8555/hub/api"
+
+c.DaskGateway.public_url = "https://hub.local"
