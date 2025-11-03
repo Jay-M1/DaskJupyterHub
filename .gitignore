@@ -1,9 +1,15 @@
+__pycache__/
+
 jupyterhub
 nextsteps.txt
-.ipynb_checkpoints
+.ipynb_checkpoints/
 
 jupyter.token
 jupyterhub_cookie_secret
 jupyterhub.sqlite
 nginx/certs
 .env
+
+jupy/notebook/requirements.txt
+rocky/requirements.txt
+coffea-backup/requirements.txt

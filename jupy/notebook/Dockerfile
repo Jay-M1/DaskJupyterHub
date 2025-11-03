@@ -20,21 +20,11 @@ RUN apt-get update && apt-get install -y wget build-essential libssl-dev zlib1g-
 # Create Python 3.10 virtual environment
 RUN python3.10 -m venv /opt/venv310
 
+COPY requirements.txt .
+
 # Upgrade pip and install all needed packages in venv
 RUN /opt/venv310/bin/pip install --upgrade pip && \
-    /opt/venv310/bin/pip install \
-    jupyterhub \
-    jupyterlab \
-    ipykernel \
-    dask==2025.4.1 \
-    distributed==2025.4.1 \
-    dask-jobqueue==0.9.0 \
-    dask-gateway==2025.4.0 \
-    lz4==4.3.3 \
-    msgpack==1.1.0 \
-    tornado==6.4.2 \
-    numpy==1.26.4 \
-    pandas==2.2.3
+    /opt/venv310/bin/pip install --no-cache-dir -r requirements.txt
 
 # Register Python 3.10 kernel in Jupyter
 RUN /opt/venv310/bin/python -m ipykernel install --name python310 --display-name "Python 3.10 (venv310)"

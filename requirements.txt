@@ -1,0 +1,33 @@
+# Core Dask ecosystem (latest stable 2025 versions)
+dask==2025.4.1
+distributed==2025.4.1
+dask-jobqueue==0.9.0
+dask-gateway==2025.4.0
+dask-gateway-server
+
+# Performance & serialization
+lz4==4.3.3
+msgpack==1.1.0
+async_timeout
+tornado==6.4.2
+SQLAlchemy<2.0
+
+# Data science stack
+numpy==1.26.4
+pandas==2.2.3
+matplotlib==3.10.7
+
+# Coffea ecosystem
+coffea==2025.3.0
+coffea[dask]
+hist
+awkward
+vector
+
+# Jupyter environment
+jupyterhub
+jupyterlab
+ipykernel
+
+# Utility
+tools==1.0.0

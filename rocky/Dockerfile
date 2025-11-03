@@ -50,18 +50,11 @@ RUN wget https://www.python.org/ftp/python/3.12.4/Python-3.12.4.tgz \
 ENV PATH="/usr/local/bin:$PATH"
 #TODO mach python 3.12 from source weg
 # Use pip for Python 3.12 to install Dask Gateway
+COPY requirements.txt .
+
 RUN python3.12 -m ensurepip \
     && python3.12 -m pip install --upgrade pip --no-cache-dir \
-    && python3.12 -m pip install --no-cache-dir \
-    dask-gateway==2024.1.0 \
-    dask==2024.1.0 \
-    distributed==2024.1.0 \
-    'dask-gateway-server' \
-    async_timeout \
-    'SQLAlchemy<2.0' \
-    lz4 \
-    msgpack \
-    tornado
+    && python3.12 -m pip install --no-cache-dir -r requirements.txt
 ARG GIT_REPO_VERSION=unknown
 RUN python3.12 -m pip install --no-cache-dir git+https://github.com/Jay-M1/dask-gateway-htcondor.git
 
