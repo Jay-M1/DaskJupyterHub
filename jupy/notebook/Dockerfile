@@ -9,13 +9,13 @@ RUN rm -rf /opt/conda
 # Install Python 3.10 system packages
 RUN apt-get update && apt-get install -y wget build-essential libssl-dev zlib1g-dev \
     libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libgdbm-dev \
-    libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev libffi-dev uuid-dev && \
+    libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev libffi-dev uuid-dev cmake && \
     wget https://www.python.org/ftp/python/3.10.17/Python-3.10.17.tgz && \
     tar xzf Python-3.10.17.tgz && \
     cd Python-3.10.17 && \
     ./configure --enable-optimizations --prefix=/usr/local && \
     make -j$(nproc) && make altinstall && \
-    cd .. && rm -rf Python-3.10.17*
+    cd .. && rm -rf Python-3.10.17* 
 
 # Create Python 3.10 virtual environment
 RUN python3.10 -m venv /opt/venv310
@@ -43,7 +43,7 @@ RUN ln -sf /opt/venv310/bin/jupyterhub-singleuser /usr/local/bin/jupyterhub-sing
     ln -sf /opt/venv310/bin/jupyter /usr/local/bin/jupyter
 
 # Set permissions
-RUN chmod -R 755 /opt/venv310
+RUN chmod -R 777 /opt/venv310
 
 USER $NB_USER
 

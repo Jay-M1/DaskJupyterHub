@@ -1,7 +1,7 @@
 FROM jupyterhub/jupyterhub@sha256:b81d3265ace34fccba84dafa3dda3354bbcdb64a5bdca44b79849d10e29aa35b
 
 RUN apt-get update && \
-    apt-get install -y software-properties-common && \
+    apt-get install -y software-properties-common cmake && \
     add-apt-repository ppa:deadsnakes/ppa && \
     apt-get update && \
     apt-get install -y python3.10 python3.10-venv python3.10-dev python3-pip && \
