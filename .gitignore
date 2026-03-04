@@ -1,5 +1,7 @@
 __pycache__/
 
+upload_image.sh
+
 jupyterhub
 nextsteps.txt
 .ipynb_checkpoints/
