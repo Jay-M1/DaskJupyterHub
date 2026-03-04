@@ -5,20 +5,24 @@ services:
     build:
       context: ./rocky
       args:
-        GIT_REPO_VERSION: "2938"
+        GIT_REPO_VERSION: "29381"
     network_mode: host
     ports:
       - "9618:9618"
       - "8000:8000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/condor:/var/lib/condor
+      - /tmp/.dask-gateway/:/tmp/.dask-gateway/
+      #- /var/lib/condor:/var/lib/condor
       - /home:/home
+      #- /etc/condor/tokens.d/:/etc/condor/tokens.d/
+      - /var/lib/condor/fs_auth:/var/lib/condor/fs_auth
+      - /etc/condor/security/pool_pw.passwd:/etc/condor/security/pool_pw.passwd
     env_file:
       - .env
   jupyterhub:
     image: my_jupyterhub-jupyterhub
-    build: 
+    build:
       context: ./jupy
     env_file:
       - .env
@@ -30,7 +34,7 @@ services:
       - ./jupy/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
       - ./jupy/jupyter.token:/srv/jupyterhub/jupyter.token
       - /var/run/docker.sock:/var/run/docker.sock
-      
+
   notebook:
     depends_on:
       - jupyterhub
