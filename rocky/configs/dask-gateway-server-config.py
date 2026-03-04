@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 c.DaskGateway.backend_class = ( 
             "dask_gateway_htcondor.htcondor.HTCondorBackend"
             )
-c.DaskGateway.public_url = "http://lx5:8000"
+c.DaskGateway.public_url = "http://bms1:8000"
 
 # The resource limits for a worker
 c.HTCondorClusterConfig.worker_memory = '2 G'
@@ -24,9 +24,9 @@ c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorClusterConfig.extra_jdl = {
     "accounting_group": "dask",
     "requirements": '(HasDocker == true)',
-    "log":    "/var/lib/condor/dask/job.$(ClusterId).$(ProcId).log",
-    "output": "/var/lib/condor/dask/job.$(ClusterId).$(ProcId).out",
-    "error":  "/var/lib/condor/dask/job.$(ClusterId).$(ProcId).err",
+    "log":    "/home/jmustafi/dask/job.$(ClusterId).$(ProcId).log",
+    "output": "/home/jmustafi/dask/job.$(ClusterId).$(ProcId).out",
+    "error":  "/home/jmustafi/dask/job.$(ClusterId).$(ProcId).err",
 }
 c.HTCondorClusterConfig.staging_directory = "/tmp/.dask-gateway/"
 c.HTCondorClusterConfig.tls_worker_node_prefix_path = ""
@@ -35,6 +35,4 @@ c.HTCondorBackend.scheduler_universe = "docker"
 
 c.DaskGateway.authenticator_class = "dask_gateway_server.auth.JupyterHubAuthenticator"
 c.JupyterHubAuthenticator.jupyterhub_api_token = os.getenv("JUPYTERHUB_API_TOKEN")
-c.JupyterHubAuthenticator.jupyterhub_api_url = "http://lx5.etp.kit.edu:8555/hub/api"
-
-c.DaskGateway.public_url = "https://hub.local"
+c.JupyterHubAuthenticator.jupyterhub_api_url = "http://bms1.etp.kit.edu:8555/hub/api"
