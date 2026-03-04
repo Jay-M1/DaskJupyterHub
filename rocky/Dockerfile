@@ -18,7 +18,9 @@ RUN authconfig --enablesssd --update
 
 
 RUN dnf -y install \
+    cmake \
     gcc \
+    gcc-c++ \
     make \
     wget \
     openssl-devel \
@@ -35,7 +37,6 @@ RUN dnf -y install \
     libnsl2 \
     libtirpc-devel \
     && dnf clean all
-
 
 # Install Python 3.12 from source
 RUN wget https://www.python.org/ftp/python/3.12.4/Python-3.12.4.tgz \
@@ -63,8 +64,8 @@ COPY configs/dask-gateway-server-config.py /srv/dask-gateway-server-config.py
 # Configure HTCondor
 COPY configs/condor/config.d /etc/condor/config.d
 COPY configs/condor/tokens.d /etc/condor/tokens.d
-RUN chmod 600 /etc/condor/tokens.d/*
-RUN mkdir -m 1777 /var/lib/condor/fs_auth
+# RUN chmod 600 /etc/condor/tokens.d/*
+# RUN mkdir -m 1777 /var/lib/condor/fs_auth
 
 COPY --chmod=777 test.sh /tmp/test.sh
 COPY --chmod=666 job.jdl /tmp/job.jdl
