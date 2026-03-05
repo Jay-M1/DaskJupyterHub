@@ -12,7 +12,7 @@ services:
       - "8000:8000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /tmp/.dask-gateway/:/tmp/.dask-gateway/
+      - /home/jmustafi/.dask-gateway/:/home/jmustafi/.dask-gateway/
       #- /var/lib/condor:/var/lib/condor
       - /home:/home
       #- /etc/condor/tokens.d/:/etc/condor/tokens.d/
