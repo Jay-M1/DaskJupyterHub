@@ -17,6 +17,9 @@ docker network prune -f
 docker network rm $(docker network ls -q) 2>/dev/null
 docker rmi -f $(docker images -q) 2>/dev/null
 
+# Ensure dask-gateway staging directory exists and is writable
+mkdir -p ~/.dask-gateway
+
 # Initialize swarm with specific IP (required for overlay networking)
 docker swarm init --advertise-addr 129.13.101.141
 
