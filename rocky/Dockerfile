@@ -56,7 +56,6 @@ COPY requirements.txt .
 RUN python3.12 -m ensurepip \
     && python3.12 -m pip install --upgrade pip --no-cache-dir \
     && python3.12 -m pip install --no-cache-dir -r requirements.txt
-ARG GIT_REPO_VERSION=unknown
 RUN python3.12 -m pip install --no-cache-dir git+https://github.com/Jay-M1/dask-gateway-htcondor.git
 
 COPY configs/dask-gateway-server-config.py /srv/dask-gateway-server-config.py
