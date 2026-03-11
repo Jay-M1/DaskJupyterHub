@@ -5,6 +5,10 @@ for dir in rocky coffea-backup jupy/notebook; do
     cp requirements.txt $dir/requirements.txt
 done
 
+# Copy local dask-gateway-htcondor package into rocky build context
+rm -rf rocky/dask-gateway-htcondor/
+cp -r /home/jmustafi/dask-gateway-htcondor/dask-gateway-htcondor/ rocky/dask-gateway-htcondor/
+
 # Stop and remove all containers
 docker stop $(docker ps -aq) 2>/dev/null
 docker rm $(docker ps -aq) 2>/dev/null
