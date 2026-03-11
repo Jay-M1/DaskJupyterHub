@@ -24,11 +24,8 @@ c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorClusterConfig.extra_jdl = {
     "accounting_group": "dask",
     "requirements": '(HasDocker == true)',
-    "log":    "/home/jmustafi/dask/job.$(ClusterId).$(ProcId).log",
-    "output": "/home/jmustafi/dask/job.$(ClusterId).$(ProcId).out",
-    "error":  "/home/jmustafi/dask/job.$(ClusterId).$(ProcId).err",
 }
-c.HTCondorClusterConfig.staging_directory = "/home/jmustafi/.dask-gateway/"
+c.HTCondorClusterConfig.staging_directory = "/home/jmustafi/dask-gateway-staging/{username}/"
 c.HTCondorClusterConfig.tls_worker_node_prefix_path = ""
 c.HTCondorBackend.scheduler_docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorBackend.scheduler_universe = "docker"
