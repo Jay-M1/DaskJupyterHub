@@ -73,12 +73,21 @@ The `rocky` container uses Python 3.12 (built from source); the `notebook` conta
 
 A `.env` file (not in git) must exist with at least `JUPYTERHUB_API_TOKEN`. This token is shared between `jupyterhub` and `htrocky` services.
 
+## Testing the HTCondor Backend
+
+Tests live in `rocky/dask-gateway-htcondor/tests/`. Run them inside the source tree:
+```bash
+cd rocky/dask-gateway-htcondor
+pytest tests/
+```
+Uses `pytest-mock`; tests mock filesystem and uid operations so they run without a real HTCondor pool.
+
 ## Owned External Repositories
 
 Two external resources used in this stack are owned by the repo author and can be modified:
 
 - **`github.com/Jay-M1/dask-gateway-htcondor`** — The HTCondor backend for Dask Gateway. Installed in the `htrocky` image from the **local copy** at `rocky/dask-gateway-htcondor/` (copied from `/home/jmustafi/dask-gateway-htcondor/dask-gateway-htcondor/` by `restart.sh`). Edit locally and rebuild — no git push required for deployment.
-- **`uhsur/coffea-base-almalinux9:latest`** (Docker Hub) — The worker/scheduler image used by HTCondor Docker universe jobs, configured in `rocky/configs/dask-gateway-server-config.py`. Changes to the Python environment, coffea version, or dependencies available on workers should be made in that image.
+- **`uhsur/coffea-base-almalinux9:latest`** (Docker Hub) — The worker/scheduler image used by HTCondor Docker universe jobs, configured in `rocky/configs/dask-gateway-server-config.py`. Changes to the Python environment, coffea version, or dependencies available on workers should be made in that image. To rebuild and push: build from `~/my_jupyterhub/coffea-backup/`, tag as `uhsur/coffea-base-almalinux9:latest`, and push to Docker Hub (see `upload_image.sh`).
 
 ## Systemd Service
 
