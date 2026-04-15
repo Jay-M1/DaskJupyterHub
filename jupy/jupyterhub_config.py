@@ -1,5 +1,4 @@
 import os
-import warnings
 
 c = get_config() # type: ignore[name-defined]  # noqa: F821
 
@@ -17,9 +16,17 @@ c.LDAPAuthenticator.user_search_base ="dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"
 c.LDAPAuthenticator.bind_dn_template = ["uid={username},ou=people,dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"]
 c.LDAPAuthenticator.enable_auth_state = True
 c.LDAPAuthenticator.auth_state_attributes = ["uid", "uidNumber", "gidNumber"]
-c.CryptKeeper.keys = [os.urandom(32)]
+_key_file = "/srv/jupyterhub/auth_state.key"
+if os.path.exists(_key_file):
+    with open(_key_file, "rb") as _f:
+        _key = _f.read()
+else:
+    _key = os.urandom(32)
+    with open(_key_file, "wb") as _f:
+        _f.write(_key)
+c.CryptKeeper.keys = [_key]
 
-# Allow all users to log in
+# Allow all valid LDAP users to log in
 c.Authenticator.allow_all = True
 
 # Specify the Docker spawner
@@ -54,7 +61,8 @@ c.JupyterHub.services = [
 # Define the environment variables for the user
 async def define_environment(spawner):
     auth_state = await spawner.user.get_auth_state()
-    warnings.warn(f"---------------------> {auth_state}")
+    if auth_state is None:
+        raise RuntimeError("auth_state unavailable — please log out and log back in")
     spawner.environment["NB_UID"] = str(auth_state["user_attributes"]["uidNumber"][0])
     spawner.environment["NB_GID"] = str(auth_state["user_attributes"]["gidNumber"][0])
     spawner.environment["NB_USER"] = str(auth_state["user_attributes"]["uid"][0])
