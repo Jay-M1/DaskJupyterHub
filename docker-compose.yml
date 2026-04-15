@@ -12,7 +12,7 @@ services:
       - "8000:8000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/jmustafi/dask-gateway-staging/:/home/jmustafi/dask-gateway-staging/
+      - /var/lib/dask-gateway:/var/lib/dask-gateway
       #- /var/lib/condor:/var/lib/condor
       - /home:/home
       #- /etc/condor/tokens.d/:/etc/condor/tokens.d/
@@ -29,7 +29,7 @@ services:
     networks:
       - jupyternet
     ports:
-      - "8555:8555"
+      - "127.0.0.1:8555:8555"
     volumes:
       - ./jupy/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
       - ./jupy/jupyter.token:/srv/jupyterhub/jupyter.token
@@ -55,9 +55,10 @@ services:
       - jupyternet
     depends_on:
       - jupyterhub
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      - "hub.local:127.0.0.1"
 
 networks:
   jupyternet:

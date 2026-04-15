@@ -25,11 +25,12 @@ c.HTCondorClusterConfig.extra_jdl = {
     "accounting_group": "dask",
     "requirements": '(HasDocker == true)',
 }
-c.HTCondorClusterConfig.staging_directory = "/home/jmustafi/dask-gateway-staging/{username}/"
+c.HTCondorClusterConfig.staging_directory = "/var/lib/dask-gateway/{username}/"
+c.HTCondorClusterConfig.htcondor_staging_directory = "/var/lib/dask-gateway/{username}/htcondor/"
 c.HTCondorClusterConfig.tls_worker_node_prefix_path = ""
 c.HTCondorBackend.scheduler_docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorBackend.scheduler_universe = "docker"
 
 c.DaskGateway.authenticator_class = "dask_gateway_server.auth.JupyterHubAuthenticator"
 c.JupyterHubAuthenticator.jupyterhub_api_token = os.getenv("JUPYTERHUB_API_TOKEN")
-c.JupyterHubAuthenticator.jupyterhub_api_url = "http://bms1.etp.kit.edu:8555/hub/api"
+c.JupyterHubAuthenticator.jupyterhub_api_url = "http://127.0.0.1:8555/hub/api"
