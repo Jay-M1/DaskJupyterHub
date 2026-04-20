@@ -7,7 +7,7 @@ Requires=docker.service
 Type=oneshot
 RemainAfterExit=yes
 User=jmustafi
-WorkingDirectory=/opt/jupyterhub-htcondor
+WorkingDirectory=/opt/jupyterhub-htcondor/DaskJupyterHub
 
 # Initialize swarm (ignore error if already active)
 ExecStartPre=/usr/bin/docker swarm init --advertise-addr 129.13.101.141 || true
