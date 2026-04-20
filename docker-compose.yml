@@ -1,3 +1,5 @@
+name: jupyterhub-htcondor
+
 services:
 
   htrocky:

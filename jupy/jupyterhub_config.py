@@ -38,7 +38,7 @@ c.DockerSpawner.image = 'jnotebook_image'
 # Remove containers once they are stopped
 c.DockerSpawner.remove = False # True??
 c.DockerSpawner.use_internal_ip = True
-c.DockerSpawner.network_name = 'my_jupyterhub_jupyternet' # jupyeternet???
+c.DockerSpawner.network_name = 'jupyterhub-htcondor_jupyternet' # jupyeternet???
 c.Spawner.debug = True
 #c.DockerSpawner.debug = True
 #c.DockerSpawner.cmd = ["start-notebook.sh"]
