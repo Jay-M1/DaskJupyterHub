@@ -10,7 +10,7 @@ User=jmustafi
 WorkingDirectory=/opt/jupyterhub-htcondor/DaskJupyterHub
 
 # Initialize swarm (ignore error if already active)
-ExecStartPre=/usr/bin/docker swarm init --advertise-addr 129.13.101.141 || true
+ExecStartPre=/bin/sh -c '/usr/bin/docker swarm init --advertise-addr 129.13.101.141 || true'
 ExecStartPre=+/bin/mkdir -p /var/lib/dask-gateway
 ExecStartPre=+/bin/chmod 1777 /var/lib/dask-gateway
 
