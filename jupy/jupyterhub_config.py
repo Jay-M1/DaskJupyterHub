@@ -66,5 +66,9 @@ async def define_environment(spawner):
     spawner.environment["NB_UID"] = str(auth_state["user_attributes"]["uidNumber"][0])
     spawner.environment["NB_GID"] = str(auth_state["user_attributes"]["gidNumber"][0])
     spawner.environment["NB_USER"] = str(auth_state["user_attributes"]["uid"][0])
+    # Route gateway traffic through nginx so dashboard links are HTTPS, not port 8000
+    spawner.environment["DASK_GATEWAY__ADDRESS"] = "https://bms1.etp.kit.edu"
+    spawner.environment["DASK_GATEWAY__PROXY_ADDRESS"] = "gateway://bms1.etp.kit.edu:8000"
+    spawner.environment["DASK_GATEWAY__AUTH__TYPE"] = "jupyterhub"
 
 c.Spawner.pre_spawn_hook = define_environment
