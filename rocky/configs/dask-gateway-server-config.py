@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 c.DaskGateway.backend_class = ( 
             "dask_gateway_htcondor.htcondor.HTCondorBackend"
             )
-c.DaskGateway.public_url = "http://bms1:8000"
+c.DaskGateway.public_url = "https://bms1.etp.kit.edu/clusters/"
 
 # The resource limits for a worker
 c.HTCondorClusterConfig.worker_memory = '2 G'
