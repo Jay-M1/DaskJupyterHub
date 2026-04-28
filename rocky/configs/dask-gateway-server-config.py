@@ -20,6 +20,9 @@ c.HTCondorClusterConfig.worker_cores = 1
 c.HTCondorBackend.cluster_start_timeout = 6000000000000000000000 # for job sched
 c.HTCondorBackend.worker_start_timeout = 6000000000000000000000
 
+# Automatically shut down clusters idle for more than 1 hour (no active tasks)
+c.HTCondorClusterConfig.idle_timeout = 3600
+
 c.HTCondorClusterConfig.docker_image = "uhsur/coffea-base-almalinux9:latest"
 c.HTCondorClusterConfig.extra_jdl = {
     "accounting_group": "dask",
