@@ -44,7 +44,9 @@ c.Spawner.debug = True
 #c.DockerSpawner.cmd = ["start-notebook.sh"]
 
 c.DockerSpawner.volumes = {
-    '/home/{username}':  '/home/{username}'
+    '/home/{username}': '/home/{username}',
+    '/ceph/{username}': '/ceph/{username}',
+    '/work/{username}': '/work/{username}',
 }
 c.DockerSpawner.extra_create_kwargs = {
     "user": "root" # Can also be an integer UID
