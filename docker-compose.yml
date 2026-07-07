@@ -53,12 +53,14 @@ services:
       context: ./nginx
     ports:
       - "443:443"
+      - "80:80"
     networks:
       - jupyternet
     depends_on:
       - jupyterhub
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./nginx/certbot-webroot:/var/www/certbot:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
