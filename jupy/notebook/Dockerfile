@@ -24,7 +24,8 @@ COPY requirements.txt .
 
 # Upgrade pip and install all needed packages in venv
 RUN /opt/venv310/bin/pip install --upgrade pip && \
-    /opt/venv310/bin/pip install --no-cache-dir -r requirements.txt
+    /opt/venv310/bin/pip install --no-cache-dir -r requirements.txt && \
+    /opt/venv310/bin/pip install --no-cache-dir batchspawner
 
 # Register Python 3.10 kernel in Jupyter
 RUN /opt/venv310/bin/python -m ipykernel install --name python310 --display-name "Python 3.10 (venv310)"
@@ -40,10 +41,21 @@ ENV JUPYTER_PREFER_ENV_PATH=1
 
 RUN ln -sf /opt/venv310/bin/jupyterhub-singleuser /usr/local/bin/jupyterhub-singleuser && \
     ln -sf /opt/venv310/bin/jupyterhub /usr/local/bin/jupyterhub && \
-    ln -sf /opt/venv310/bin/jupyter /usr/local/bin/jupyter
+    ln -sf /opt/venv310/bin/jupyter /usr/local/bin/jupyter && \
+    ln -sf /opt/venv310/bin/batchspawner-singleuser /usr/local/bin/batchspawner-singleuser
 
 # Set permissions
 RUN chmod -R 777 /opt/venv310
+
+# As an HTCondor batch job the container runs as the submitting LDAP uid/gid
+# (non-root), which has no passwd entry in the image ("I have no name!" in
+# terminals, getpass.getuser() fails). start.sh can self-register the uid,
+# but only if /etc/passwd is writable: the docker-stacks default is
+# group-root-writable only (expects gid 0, HTCondor uses the LDAP gid).
+# Also let the registered entry use the real $HOME instead of the
+# hardcoded /home/jovyan.
+RUN chmod o+w /etc/passwd && \
+    sed -i 's|,,,:/home/jovyan:|,,,:${HOME}:|' /usr/local/bin/start.sh
 
 USER $NB_USER
 

@@ -28,14 +28,13 @@ services:
       context: ./jupy
     env_file:
       - .env
-    networks:
-      - jupyternet
-    ports:
-      - "127.0.0.1:8555:8555"
+    network_mode: host
     volumes:
       - ./jupy/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
       - ./jupy/jupyter.token:/srv/jupyterhub/jupyter.token
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /home:/home
+      - /var/lib/condor/fs_auth:/var/lib/condor/fs_auth
+      - /etc/condor/security/pool_pw.passwd:/etc/condor/security/pool_pw.passwd
 
   notebook:
     depends_on:

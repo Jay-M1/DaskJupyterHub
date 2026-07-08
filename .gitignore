@@ -21,3 +21,9 @@ jupy/notebook/requirements.txt
 rocky/requirements.txt
 coffea-backup/requirements.txt
 CLAUDE.md
+
+jupy/configs/condor/tokens.d/
+jupy/configs/nscd.conf
+# HTCondor IDTOKENs / pool auth secrets - never track (repo is public)
+**/condor/tokens.d/
+rocky/configs/condor/tokens.d/

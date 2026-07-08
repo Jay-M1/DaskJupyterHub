@@ -1,10 +1,12 @@
 import os
 
+from batchspawner import CondorSpawner
+from traitlets import Unicode, default
+
 c = get_config() # type: ignore[name-defined]  # noqa: F821
 
 # Set the JupyterHub IP and port
 c.JupyterHub.bind_url = 'http://0.0.0.0:8555'
-c.JupyterHub.hub_connect_ip = 'jupyterhub'
 
 # Use authentication
 c.JupyterHub.authenticator_class = "LDAPAuthenticator"
@@ -29,28 +31,115 @@ c.CryptKeeper.keys = [_key]
 # Allow all valid LDAP users to log in
 c.Authenticator.allow_all = True
 
-# Specify the Docker spawner
-c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
-
-# Set the Docker image for single-user servers
-c.DockerSpawner.image = 'jnotebook_image'
-#c.DockerSpawner.notebook_dir = '/home/{username}/work'
-# Remove containers once they are stopped
-c.DockerSpawner.remove = False # True??
-c.DockerSpawner.use_internal_ip = True
-c.DockerSpawner.network_name = 'jupyterhub-htcondor_jupyternet' # jupyeternet???
 c.Spawner.debug = True
-#c.DockerSpawner.debug = True
-#c.DockerSpawner.cmd = ["start-notebook.sh"]
+c.Spawner.start_timeout = 300
 
-c.DockerSpawner.volumes = {
-    '/home/{username}': '/home/{username}',
-    '/ceph/{username}': '/ceph/{username}',
-    '/work/{username}': '/work/{username}',
-}
-c.DockerSpawner.extra_create_kwargs = {
-    "user": "root" # Can also be an integer UID
-}
+# JupyterHub's default is 127.0.0.1, which makes the notebook server on the
+# execute node unreachable from the Hub ("Connection refused"). Safe to set
+# globally: batchspawner overwrites self.ip with the job's execute host after
+# submission, so the Hub still connects to the right address.
+c.Spawner.ip = "0.0.0.0"
+
+# Notebook servers run as HTCondor batch jobs (vanilla universe with
+# +WantContainer/+ContainerImage) instead of as Docker containers on bms1
+# itself. Despite +HookKeyword = "SINGULARITY", the ETP execute nodes run
+# these container jobs via Docker, not Apptainer (verified with
+# condor_ssh_to_job: the job's process tree sits under containerd-shim), as
+# the real submitting LDAP uid, so no root/gosu is involved and start.sh
+# runs fine. Docker's default bridge networking would put the job into its
+# own network namespace (unreachable from bms1), hence
+# docker_network_type = host in the JDL, same as the dask workers in
+# rocky/dask-gateway-htcondor/. Explicit docker universe was ruled out
+# earlier for the root/gosu reason; the container-universe path makes that
+# moot. Verified empirically with throwaway condor_submit test jobs
+# (~/nb_test on bms1).
+#
+# Pinned tag, not :latest: the execute nodes never re-pull a tag they
+# already have cached, so pushing a new image under the same tag silently
+# does nothing. Rolling out an image update means: push under a new tag,
+# change this line, restart the hub.
+NOTEBOOK_IMAGE = "docker://uhsur/jupyterhub-notebook:2026-07-08"
+
+
+class HTCondorNotebookSpawner(CondorSpawner):
+    req_memory = Unicode("4096", help="Memory (MB) requested for the notebook job").tag(config=True)
+    req_nprocs = Unicode("2", help="CPUs requested for the notebook job").tag(config=True)
+    req_environment = Unicode(help="semicolon-joined KEY=VALUE env for the job").tag(config=True)
+
+    # The Hub runs as root, so this "sudo -n -u <user>" needs no sudoers.d
+    # entry (root invoking sudo to become anyone always succeeds). This
+    # matches dask-gateway-server's own privilege-drop mechanism
+    # (do_as_user() in dask_gateway_server/backends/jobqueue/base.py, used
+    # by htrocky) rather than batchspawner's default "sudo -E -u {username}"
+    # (drops -E: HTCondor's FS pool auth needs the real uid, and identity
+    # switch alone via a plain os.seteuid() wrapper was tried first and
+    # does NOT satisfy it — only a real sudo-performed setuid does, because
+    # it changes the process's real uid, not just its effective uid).
+    exec_prefix = Unicode("sudo -n -u {username} -H")
+
+    batch_script = Unicode("""
+universe = vanilla
+executable = /bin/sh
+transfer_executable = false
+# cd $HOME: without it the server starts in the HTCondor scratch dir and
+# JupyterLab's file browser and terminals root there instead of the home dir
+arguments = "-c 'cd $HOME && exec {cmd}'"
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT_OR_EVICT
+initialdir = {homedir}
+output = {homedir}/.jupyterhub.condor.out
+error = {homedir}/.jupyterhub.condor.err
+log = {homedir}/.jupyterhub.condor.log
+request_cpus = {nprocs}
+request_memory = {memory}
++ContainerImage = "{docker_image}"
++WantContainer = true
++WantDockerImage = true
++HookKeyword = "SINGULARITY"
+docker_network_type = host
+environment = {environment}
+{options}
+queue
+""").tag(config=True)
+
+    req_docker_image = Unicode(NOTEBOOK_IMAGE).tag(config=True)
+
+    def get_env(self):
+        env = super().get_env()
+        # The Hub's internal API (hub_port, 8081 by default) was only ever
+        # reachable within the jupyternet overlay network; execute nodes
+        # can't reach it ("Network is unreachable" from batchspawner-
+        # singleuser's registration call). Route just these two URLs
+        # through the already-open public HTTPS path (nginx -> proxy:8555
+        # -> hub) instead. Deliberately done here rather than via
+        # c.JupyterHub.hub_connect_url: that trait is shared with the
+        # proxy's own internal routing to the Hub (Hub.url returns
+        # connect_url when set, and the proxy uses Hub.url too), so setting
+        # it globally broke the proxy's "/" route to the Hub itself.
+        hub_public_api = "https://bms1.etp.kit.edu/hub/api"
+        env["JUPYTERHUB_API_URL"] = hub_public_api
+        env["JUPYTERHUB_ACTIVITY_URL"] = f"{hub_public_api}/users/{self.user.name}/activity"
+        return env
+
+    @default("req_homedir")
+    def _req_homedir_default(self):
+        # Base class default shells out to pwd.getpwnam(self.user.name) on
+        # the *Hub's* local passwd db — LDAP users aren't in it. This
+        # matches the DockerSpawner-era home directory convention instead.
+        return f"/home/{self.user.name}"
+
+    @default("req_environment")
+    def _req_environment_default(self):
+        env = self.get_env()
+        # jnotebook_image bakes ENV HOME=/home/jovyan (docker-stacks
+        # default); point it at the real, auto-mounted LDAP home dir
+        # instead so start.sh's privilege-drop hooks and the notebook
+        # itself operate on the right directory (verified in ~/nb_test).
+        env["HOME"] = self.req_homedir
+        return ";".join(f"{k}={v}" for k, v in env.items())
+
+
+c.JupyterHub.spawner_class = HTCondorNotebookSpawner
 
 api_token = os.environ.get("JUPYTERHUB_API_TOKEN")
 if not api_token:
