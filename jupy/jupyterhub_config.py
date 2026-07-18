@@ -5,6 +5,22 @@ from traitlets import Unicode, default
 
 c = get_config() # type: ignore[name-defined]  # noqa: F821
 
+# Persist all hub state on a named docker volume mounted at
+# /srv/jupyterhub/state (see docker-compose.yml). Without this the SQLite DB,
+# the cookie secret and the auth_state crypt key live only inside the
+# container's writable layer, so every `docker compose up --build`/recreate
+# starts from an empty DB. That orphans all running single-user servers: their
+# JUPYTERHUB_API_TOKEN is no longer in the DB, so dask-gateway's JupyterHub
+# auth (which resolves the token via /hub/api/authorizations/token/<t>) gets a
+# 404 and returns 401 to the notebook. Keeping the DB on a volume lets running
+# servers survive hub restarts and rebuilds. The state dir holds secrets
+# (tokens, cookie secret) and lives outside the git repo, so nothing sensitive
+# can be committed.
+_STATE_DIR = "/srv/jupyterhub/state"
+os.makedirs(_STATE_DIR, exist_ok=True)
+c.JupyterHub.db_url = "sqlite:///%s/jupyterhub.sqlite" % _STATE_DIR
+c.JupyterHub.cookie_secret_file = "%s/jupyterhub_cookie_secret" % _STATE_DIR
+
 # Set the JupyterHub IP and port
 c.JupyterHub.bind_url = 'http://0.0.0.0:8555'
 
@@ -18,7 +34,7 @@ c.LDAPAuthenticator.user_search_base ="dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"
 c.LDAPAuthenticator.bind_dn_template = ["uid={username},ou=people,dc=ekp,dc=physik,dc=uni-karlsruhe,dc=de"]
 c.LDAPAuthenticator.enable_auth_state = True
 c.LDAPAuthenticator.auth_state_attributes = ["uid", "uidNumber", "gidNumber"]
-_key_file = "/srv/jupyterhub/auth_state.key"
+_key_file = "%s/auth_state.key" % _STATE_DIR
 if os.path.exists(_key_file):
     with open(_key_file, "rb") as _f:
         _key = _f.read()

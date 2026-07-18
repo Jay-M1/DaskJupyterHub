@@ -7,7 +7,7 @@ services:
     build:
       context: ./rocky
       args:
-        GIT_REPO_VERSION: "29381"
+        GIT_REPO_VERSION: "48cf87f"
     network_mode: host
     ports:
       - "9618:9618"
@@ -32,6 +32,11 @@ services:
     volumes:
       - ./jupy/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
       - ./jupy/jupyter.token:/srv/jupyterhub/jupyter.token
+      # Persist the hub DB, cookie secret and auth_state key so recreating the
+      # hub container does not orphan running notebook servers (which would
+      # break dask-gateway auth with a 401). Named volume => secrets stay off
+      # the git repo. Only wiped by an explicit `docker volume rm`.
+      - hub-state:/srv/jupyterhub/state
       - /home:/home
       - /var/lib/condor/fs_auth:/var/lib/condor/fs_auth
       - /etc/condor/security/pool_pw.passwd:/etc/condor/security/pool_pw.passwd
@@ -67,3 +72,6 @@ networks:
   jupyternet:
     driver: overlay
     attachable: true
+
+volumes:
+  hub-state:

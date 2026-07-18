@@ -10,14 +10,14 @@ jupyterlab
 ipykernel
 async_timeout
 
-dask
-distributed
+dask==2025.3.1
+distributed==2025.3.1
 dask-jobqueue
 dask-gateway
 dask-gateway-server
 lz4
-msgpack
-tornado
+msgpack==1.2.1
+tornado==6.5.7
 numpy
 pandas
 matplotlib

@@ -56,7 +56,10 @@ COPY requirements.txt .
 RUN python3.12 -m ensurepip \
     && python3.12 -m pip install --upgrade pip --no-cache-dir \
     && python3.12 -m pip install --no-cache-dir -r requirements.txt
-RUN python3.12 -m pip install --no-cache-dir git+https://github.com/Jay-M1/dask-gateway-htcondor.git
+# Install the HTCondor backend from GitHub, pinned to the ref in
+# GIT_REPO_VERSION (set in docker-compose.yml; bump it there to pull a new version).
+ARG GIT_REPO_VERSION=main
+RUN python3.12 -m pip install --no-cache-dir git+https://github.com/Jay-M1/dask-gateway-htcondor.git@${GIT_REPO_VERSION}
 
 COPY configs/dask-gateway-server-config.py /srv/dask-gateway-server-config.py
 
