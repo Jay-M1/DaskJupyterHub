@@ -27,3 +27,14 @@ jupy/configs/nscd.conf
 # HTCondor IDTOKENs / pool auth secrets - never track (repo is public)
 **/condor/tokens.d/
 rocky/configs/condor/tokens.d/
+
+# Backup-Dateien aus manuellen Aenderungen am Live-System, nie tracken
+*.bak
+*.bak-*
+
+# Eigenes Git-Repo (Jay-M1/dask-gateway-htcondor), nur lokal ausgecheckt
+# fuer den Image-Build, dort bereits eigenstaendig versioniert
+rocky/dask-gateway-htcondor/
+
+# Ungeklaerter Arbeitsstand, noch nicht reviewt
+CoffeaDemoZPeak-gateway.ipynb
