@@ -6,7 +6,8 @@ USER root
 # Remove conda completely to slim image and prevent PATH conflicts
 RUN rm -rf /opt/conda
 
-# Install Python 3.10 system packages
+# Python 3.10 aus dem Quellcode: das Debian-Base-Image stellt kein Paket in
+# dieser Version bereit; muss zur requirements.txt-Pinnung passen.
 RUN apt-get update && apt-get install -y wget build-essential libssl-dev zlib1g-dev \
     libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libgdbm-dev \
     libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev libffi-dev uuid-dev cmake && \
@@ -15,7 +16,7 @@ RUN apt-get update && apt-get install -y wget build-essential libssl-dev zlib1g-
     cd Python-3.10.17 && \
     ./configure --enable-optimizations --prefix=/usr/local && \
     make -j$(nproc) && make altinstall && \
-    cd .. && rm -rf Python-3.10.17* 
+    cd .. && rm -rf Python-3.10.17*
 
 # Create Python 3.10 virtual environment
 RUN python3.10 -m venv /opt/venv310
@@ -59,4 +60,8 @@ RUN chmod o+w /etc/passwd && \
 
 USER $NB_USER
 
+# Default-Healthcheck der docker-stacks-Basis deaktiviert: dieser Container
+# laeuft nie als Compose-Service, sondern nur als HTCondor-Batch-Job ohne
+# Docker-Daemon-Zugriff von innen, ein Healthcheck waere dort nicht
+# sinnvoll auswertbar.
 HEALTHCHECK NONE

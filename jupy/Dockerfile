@@ -11,6 +11,10 @@ RUN python3.10 -m venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
+# Eigene Runtime-Deps des Hub-Prozesses (nicht die requirements.txt am
+# Repo-Root, die ist fuer die Analyse-Umgebung von htrocky/notebook).
+# batchspawner: HTCondorNotebookSpawner in jupyterhub_config.py erbt von
+# batchspawner.CondorSpawner. jupyterhub-ldapauthenticator: LDAP-Login.
 RUN pip install --no-cache-dir jupyterhub jupyterlab batchspawner jupyterhub-ldapauthenticator
 
 # HTCondor client (condor_submit/condor_q/condor_rm) so the Hub can submit
@@ -44,6 +48,10 @@ ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 WORKDIR /srv/jupyterhub
 
+# docker-compose.yml bind-mountet dieselbe Zieldatei zusaetzlich ueber
+# ./jupy/jupyterhub_config.py -> zur Laufzeit gewinnt der Bind-Mount, ein
+# `docker compose restart jupyterhub` reicht dann fuer Config-Aenderungen.
+# Der COPY hier greift nur, falls ein Container je ohne den Mount startet.
 COPY jupyterhub_config.py jupyterhub_config.py
 COPY jupyter.token jupyter.token
 

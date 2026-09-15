@@ -1,6 +1,9 @@
 FROM rockylinux/rockylinux@sha256:767f30c94a9a43e46719408f877fb4eb91cea98401dd76a23abfc345ae5cb4ad
 
 # Accept SHA1 signature keys for HTCondor Repo signing key
+# Der HTCondor-Repo-Signing-Key ist SHA1-signiert (als unsicher geltend),
+# was Rocky/AlmaLinux 9 standardmaessig ablehnt. Ohne diese Lockerung
+# schlaegt der GPG-Import direkt darunter fehl.
 RUN update-crypto-policies --set DEFAULT:SHA1
 
 RUN rpm --import http://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
@@ -39,6 +42,7 @@ RUN dnf -y install \
     && dnf clean all
 
 # Install Python 3.12 from source
+# EL9 liefert kein Systempaket in dieser Version, daher Quellcode-Build.
 RUN wget https://www.python.org/ftp/python/3.12.4/Python-3.12.4.tgz \
     && tar xzf Python-3.12.4.tgz \
     && cd Python-3.12.4 \
@@ -81,6 +85,9 @@ RUN chmod +rx /tini
 COPY init.sh /srv/init.sh
 RUN chmod +x /srv/init.sh
 
+# Fallback-User fuer den Fall, dass ein Prozess ohne effektiven User-Wechsel
+# laeuft. Im Normalbetrieb laeuft der Gateway-Prozess mit realer Uid 0 und
+# wechselt effektiv zur anfragenden User-Uid (do_as_user() im Backend).
 RUN useradd -m jovyan
 RUN mkdir -p /tmp/.dask-gateway && chmod 777 /tmp/.dask-gateway
 
