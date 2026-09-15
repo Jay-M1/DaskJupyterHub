@@ -5,6 +5,7 @@ Self-hosted JupyterHub für HEP-Analysen am KIT/ETP, HTCondor-Batchsystem, Dask 
 - Host: `bms1.etp.kit.edu`
 - Compose-Projekt: `jupyterhub-htcondor`
 - Bei Problemen: `admin-dokumentation-troubleshooting.md`
+- Nutzer-Doku (Wiki): <https://wiki.etp.kit.edu/books/computing-and-infrastructure/page/dask-gateway>
 
 ## Architektur
 
