@@ -15,7 +15,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Repo-Root, die ist fuer die Analyse-Umgebung von htrocky/notebook).
 # batchspawner: HTCondorNotebookSpawner in jupyterhub_config.py erbt von
 # batchspawner.CondorSpawner. jupyterhub-ldapauthenticator: LDAP-Login.
-RUN pip install --no-cache-dir jupyterhub jupyterlab batchspawner jupyterhub-ldapauthenticator
+RUN pip install --no-cache-dir jupyterhub==5.5.0 jupyterlab batchspawner jupyterhub-ldapauthenticator
 
 # HTCondor client (condor_submit/condor_q/condor_rm) so the Hub can submit
 # notebook servers as batch jobs into the same ETP pool htrocky already uses.
